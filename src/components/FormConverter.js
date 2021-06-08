@@ -13,14 +13,6 @@ export default function FormConverter({ currencies, setConversionResult }) {
     setInputNumber(e.target.value);
   }
 
-  function clickHandler(e) {
-    e.preventDefault();
-    const url =
-      BASE_URL +
-      `/api/v7/convert?q=${fromRef.current.value}_${toRef.current.value}&compact=ultra&apiKey=${API_KEY}`;
-    fetchConversionRate(url);
-  }
-
   async function fetchConversionRate(url) {
     const res = await axios.get(url);
     try {
@@ -35,11 +27,27 @@ export default function FormConverter({ currencies, setConversionResult }) {
     }
   }
 
+  function clickHandler(e) {
+    e.preventDefault();
+    const url =
+      BASE_URL +
+      `/api/v7/convert?q=${fromRef.current.value}_${toRef.current.value}&compact=ultra&apiKey=${API_KEY}`;
+    fetchConversionRate(url);
+  }
+
+  function calculateRate(e) {
+    e.preventDefault();
+    const url =
+      BASE_URL +
+      `/api/v7/convert?q=${fromRef.current.value}_${toRef.current.value}&compact=ultra&apiKey=${API_KEY}`;
+    fetchConversionRate(url);
+  }
+
   return (
     <form>
       <div className="convert-from">
-        <label htmlFor="from">From:</label>
-        <select ref={fromRef} name="from" id="from">
+        <label htmlFor="from">From: </label>
+        <select ref={fromRef} name="from" id="from" onChange={calculateRate}>
           {currencies !== undefined &&
             currencies.map((item, index) => (
               <option key={index} value={item}>
@@ -50,8 +58,8 @@ export default function FormConverter({ currencies, setConversionResult }) {
       </div>
       <input type="text" name="amount" onChange={changeHandler} />
       <div className="convert-to">
-        <label htmlFor="to">To:</label>
-        <select ref={toRef} name="to" id="to">
+        <label htmlFor="to">To: </label>
+        <select ref={toRef} name="to" id="to" onChange={calculateRate}>
           {currencies !== undefined &&
             currencies.map((item, index) => (
               <option key={index} value={item}>
